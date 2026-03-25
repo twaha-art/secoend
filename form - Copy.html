@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Library Pro</title>
+
+<style>
+body{
+font-family: Arial;
+margin:0;
+background:#f4f4f4;
+}
+
+header{
+background:#2c3e50;
+color:white;
+padding:15px;
+text-align:center;
+}
+
+.form-container{
+width:300px;
+margin:60px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+}
+
+button{
+padding:10px;
+background:#2c3e50;
+color:white;
+border:none;
+cursor:pointer;
+margin-top:5px;
+}
+
+.logout{
+background:red;
+margin:10px;
+}
+
+.library{
+display:none;
+}
+
+.search-box{
+text-align:center;
+margin:20px;
+}
+
+.books{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.book{
+background:white;
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
+
+.upload-box{
+text-align:center;
+padding:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>📚 Online Library Pro</h1>
+</header>
+
+<!-- FORM -->
+<div class="form-container" id="formBox">
+<h2>User Info</h2>
+<input type="text" id="name" placeholder="Your Name">
+<input type="text" id="school" placeholder="Institution">
+<input type="text" id="class" placeholder="Class">
+<input type="text" id="roll" placeholder="Roll">
+
+<button onclick="enterLibrary()">Enter Library</button>
+</div>
+
+
+<!-- LIBRARY -->
+<div class="library" id="libraryBox">
+
+<header>
+<h2 id="welcomeText"></h2>
+<button class="logout" onclick="logout()">Logout</button>
+</header>
+
+
+<div class="upload-box">
+<input type="text" id="bookName" placeholder="Book Name">
+<input type="file" id="bookFile" accept="application/pdf">
+<button onclick="addBook()">Add Book</button>
+</div>
+
+
+<div class="search-box">
+<input type="text" id="search" placeholder="Search Books" onkeyup="searchBooks()">
+</div>
+
+
+<div class="books" id="bookList"></div>
+
+</div>
+
+
+<script>
+
+
+function enterLibrary(){
+
+let name=document.getElementById("name").value;
+let school=document.getElementById("school").value;
+let cls=document.getElementById("class").value;
+let roll=document.getElementById("roll").value;
+
+if(name && school && cls && roll){
+
+localStorage.setItem("userName",name);
+showLibrary();
+
+}
+else{
+alert("Fill all fields");
+}
+
+}
+
+
+function showLibrary(){
+
+document.getElementById("formBox").style.display="none";
+document.getElementById("libraryBox").style.display="block";
+
+let name=localStorage.getItem("userName");
+
+document.getElementById("welcomeText").innerText="Welcome "+name;
+
+loadBooks();
+
+}
+
+
+function logout(){
+localStorage.removeItem("userName");
+location.reload();
+}
+
+
+window.onload=function(){
+
+if(localStorage.getItem("userName")){
+showLibrary();
+}
+
+}
+
+
+function addBook(){
+
+let name=document.getElementById("bookName").value;
+let file=document.getElementById("bookFile").files[0];
+
+if(!name || !file){
+alert("Add book name and file");
+return;
+}
+
+let reader=new FileReader();
+
+reader.onload=function(e){
+
+let books=JSON.parse(localStorage.getItem("books")||"[]");
+
+books.push({
+name:name,
+file:e.target.result
+});
+
+localStorage.setItem("books",JSON.stringify(books));
+
+loadBooks();
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+
+function loadBooks(){
+
+let books=JSON.parse(localStorage.getItem("books")||"[]");
+
+let html="";
+
+books.forEach(book=>{
+
+html+=`
+<div class="book">
+<h3>${book.name}</h3>
+<a href="${book.file}" target="_blank">
+<button>Read PDF</button>
+</a>
+</div>
+`;
+
+});
+
+
+document.getElementById("bookList").innerHTML=html;
+
+}
+
+
+function searchBooks(){
+
+let input=document.getElementById("search").value.toLowerCase();
+
+let books=document.getElementsByClassName("book");
+
+for(let i=0;i<books.length;i++){
+
+let text=books[i].innerText.toLowerCase();
+
+books[i].style.display=text.includes(input)?"":"none";
+
+}
+
+}
+
+
+</script>
+
+</body>
+</html>
+
+```
+
+---
+
+# ব্যবহার করার নিয়ম
+
+1. File save করুন
+2. Open করুন
+3. User info দিন
+4. PDF Upload করুন
+5. Read করুন
+
+---
+
+# এই ভার্সনে Special Feature
+
+🔥 Unlimited Books
+🔥 User Upload
+🔥 Auto Save
+🔥 Logout
+🔥 Search
+
+---
+
+Twaha — এটা এখন সত্যিকারের Online Library Pro 🚀
+
+পরের আপডেটে চাইলে আমি যোগ করবো:
+
+* Admin Panel
+* Book Cover
+* Category
+* Islamic Theme
+
+আপনি বললেই আমি Upgrade করবো
